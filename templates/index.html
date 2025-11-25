@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blooomm Bowl | Fresh Bowls & Sprouts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <header class="hero" id="top">
+      <nav class="nav">
+        <div class="logo">Blooomm Bowl</div>
+        <a class="ghost-link" href="#menu">Menu</a>
+      </nav>
+      <div class="hero__content">
+        <div>
+          <p class="eyebrow">Bloom with love · Fresh sprout kitchen</p>
+          <h1>Colourful, crunchy bowls built for everyday glow.</h1>
+          <p class="lead">
+            We craft sprout, chana, corn, and fruit bowls that taste like comfort and feel like wellness.
+            Every spoonful is prepared just after you order — perfect for a nourishing lunch, a breezy snack,
+            or your post-workout refuel.
+          </p>
+          <div class="cta-group">
+            <a class="btn" href="#menu">Explore Menu</a>
+            <a class="btn btn--ghost" href="#contact">Order / Enquire</a>
+          </div>
+        </div>
+        <div class="hero__card">
+          <div class="hero__badge">Handcrafted Today</div>
+          <p class="hero__card-title">The Bloom Bowl Special</p>
+          <p class="hero__card-text">
+            A signature stack of sprouts, microgreens, crunchy peanuts, and a splash of citrus dressing.
+          </p>
+          <div class="hero__price">₹70</div>
+        </div>
+      </div>
+      <div class="hero__deco"></div>
+    </header>
+
+    <main>
+      <section class="features" id="about">
+        <div class="section-heading">
+          <p class="eyebrow">Why choose Blooomm Bowl</p>
+          <h2>Freshness, colour, crunch — bottled into every bowl.</h2>
+        </div>
+        <div class="feature-grid">
+          {% for feature in features %}
+          <article class="feature-card">
+            <h3>{{ feature.title }}</h3>
+            <p>{{ feature.text }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="menu" id="menu">
+        <div class="section-heading">
+          <p class="eyebrow">Our menu</p>
+          <h2>Choose your bowl, customise it your way.</h2>
+        </div>
+        <div class="menu-grid">
+          {% for item in menu %}
+          <article class="menu-card">
+            {% if item.badge %}
+            <span class="menu-card__badge">{{ item.badge }}</span>
+            {% endif %}
+            <h3>{{ item.name }}</h3>
+            <p class="menu-card__tagline">{{ item.tagline }}</p>
+            <p class="menu-card__body">{{ item.description }}</p>
+            <ul>
+              {% for variation in item.variations %}
+              <li>
+                <span>{{ variation.label }}</span>
+                <strong>{{ variation.price }}</strong>
+              </li>
+              {% endfor %}
+            </ul>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="cta" id="contact">
+        <div class="cta__content">
+          <p class="eyebrow">Order with love</p>
+          <h2>Call or message us to schedule your bowl pickup.</h2>
+          <p>
+            We currently serve fresh bowls for walk-ins, subscriptions, and small events in and around Pune.
+            Give us a buzz and we will prep something vibrant just for you.
+          </p>
+          <div class="cta__info">
+            <div>
+              <p class="label">Call / WhatsApp</p>
+              <a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+            </div>
+            <div>
+              <p class="label">Email</p>
+              <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+            </div>
+            <div>
+              <p class="label">Visit</p>
+              <p>{{ contact.address }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="cta__card">
+          <p>Open daily · 8 AM – 10 PM</p>
+          <p class="cta__highlight">Bulk orders &amp; custom party bowls available.</p>
+          <p>Follow @blooommbowl for the freshest drops.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>© 2024 Blooomm Bowl · Fresh bowls with love.</p>
+      <a class="ghost-link" href="#top">Back to top ↑</a>
+    </footer>
+  </body>
+</html>
