@@ -3,7 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blooomm Bowl | Fresh Bowls & Sprouts</title>
+    <meta
+      name="description"
+      content="Bloom Bowl crafts hyper fresh, nutrient-rich bowls with futuristic flavours and same-day delivery."
+    />
+    <title>Bloom Bowl | Futuristic Healthy Bowls & Ordering</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,40 +19,63 @@
   <body>
     <header class="hero" id="top">
       <nav class="nav">
-        <div class="logo">Blooomm Bowl</div>
-        <a class="ghost-link" href="#menu">Menu</a>
+        <a class="logo" href="#top" aria-label="Bloom Bowl home">
+          <img src="{{ url_for('static', filename='img/logo-mark.svg') }}" alt="" />
+          <span>Bloom Bowl</span>
+        </a>
+        <div class="nav__links">
+          <a href="#about">About</a>
+          <a href="#menu">Bowls</a>
+          <a href="#order">Order</a>
+        </div>
+        <a class="btn btn--ghost nav__cta" href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
       </nav>
-      <div class="hero__content">
-        <div>
-          <p class="eyebrow">Bloom with love · Fresh sprout kitchen</p>
-          <h1>Colourful, crunchy bowls built for everyday glow.</h1>
+      <div class="hero__inner">
+        <div class="hero__text">
+          <p class="eyebrow">Healthy bowl studio · Futuristic glow</p>
+          <h1>Bloom into the future of feel-good food.</h1>
           <p class="lead">
-            We craft sprout, chana, corn, and fruit bowls that taste like comfort and feel like wellness.
-            Every spoonful is prepared just after you order — perfect for a nourishing lunch, a breezy snack,
-            or your post-workout refuel.
+            Sprouts, legumes, fruits, and toppings are activated only after you tap order.
+            Electric deliveries keep every bowl crisp while our colour-forward flavours match your rhythm.
           </p>
           <div class="cta-group">
-            <a class="btn" href="#menu">Explore Menu</a>
-            <a class="btn btn--ghost" href="#contact">Order / Enquire</a>
+            <a class="btn" href="#order">Start an order</a>
+            <a class="btn btn--ghost" href="#menu">Browse bowls</a>
           </div>
+          <ul class="hero__stats">
+            {% for stat in stats %}
+            <li>
+              <strong>{{ stat.value }}</strong>
+              <span>{{ stat.label }}</span>
+            </li>
+            {% endfor %}
+          </ul>
         </div>
         <div class="hero__card">
-          <div class="hero__badge">Handcrafted Today</div>
-          <p class="hero__card-title">The Bloom Bowl Special</p>
-          <p class="hero__card-text">
-            A signature stack of sprouts, microgreens, crunchy peanuts, and a splash of citrus dressing.
+          <p class="hero__badge">Hyper fresh drop</p>
+          <h2>Bloom Bowl Special</h2>
+          <p>
+            Sprout base + citrus mist + neon microgreens + roasted crunch. Made to charge your day with
+            technicolor energy.
           </p>
+          <ul class="chip-list">
+            <li>24g protein</li>
+            <li>Zero refined sugar</li>
+            <li>Electric delivery</li>
+          </ul>
           <div class="hero__price">₹70</div>
+          <a class="ghost-link" href="#order">Pre-order now →</a>
         </div>
       </div>
-      <div class="hero__deco"></div>
+      <div class="hero__orb hero__orb--mint"></div>
+      <div class="hero__orb hero__orb--violet"></div>
     </header>
 
     <main>
       <section class="features" id="about">
         <div class="section-heading">
-          <p class="eyebrow">Why choose Blooomm Bowl</p>
-          <h2>Freshness, colour, crunch — bottled into every bowl.</h2>
+          <p class="eyebrow">Why choose Bloom Bowl</p>
+          <h2>Minimal ingredients, maximal future energy.</h2>
         </div>
         <div class="feature-grid">
           {% for feature in features %}
@@ -63,7 +90,7 @@
       <section class="menu" id="menu">
         <div class="section-heading">
           <p class="eyebrow">Our menu</p>
-          <h2>Choose your bowl, customise it your way.</h2>
+          <h2>Choose your bowl and tune its mood.</h2>
         </div>
         <div class="menu-grid">
           {% for item in menu %}
@@ -87,13 +114,125 @@
         </div>
       </section>
 
+      <section class="order" id="order">
+        <div class="order__grid">
+          <div class="order__lead">
+            <p class="eyebrow">Order online</p>
+            <h2>Tap in your vibe and we craft the bowl.</h2>
+            <p>
+              Answer a few prompts below so our kitchen AI and chef team can prep, pack, and send your bowl with
+              the right crunch level.
+            </p>
+            <ul class="service-modes">
+              {% for mode in service_modes %}
+              <li>
+                <div class="service-mode__title">{{ mode.label }}</div>
+                <p>{{ mode.description }}</p>
+                <span>{{ mode.eta }}</span>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          <form class="order__form" method="POST" action="{{ url_for('home') }}">
+            <div class="form-field">
+              <label for="customer_name">Full name</label>
+              <input type="text" id="customer_name" name="customer_name" placeholder="Zara from Koregaon" required />
+            </div>
+            <div class="form-field form-field--split">
+              <div>
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" placeholder="+91 90000 00000" required />
+              </div>
+              <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@flowmail.com" />
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="bowl">Bowl</label>
+              <select id="bowl" name="bowl" required>
+                {% for item in menu %}
+                <option value="{{ item.name }}">{{ item.name }} · {{ item.tagline }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="style">Mood / style</label>
+              <select id="style" name="style">
+                {% for style in serving_styles %}
+                <option value="{{ style }}">{{ style }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-field form-field--split">
+              <div>
+                <label for="mode">Service mode</label>
+                <select id="mode" name="mode">
+                  {% for mode in service_modes %}
+                  <option value="{{ mode.value }}">{{ mode.label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div>
+                <label for="quantity">Quantity</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="12" value="1" />
+              </div>
+            </div>
+            <div class="form-field">
+              <span class="label">Boosters</span>
+              <div class="pill-group">
+                {% for extra in extras %}
+                <label class="pill">
+                  <input type="checkbox" name="extras" value="{{ extra }}" />
+                  <span>{{ extra }}</span>
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="notes">Notes</label>
+              <textarea id="notes" name="notes" rows="3" placeholder="No onion, drop at the studio gate, etc."></textarea>
+            </div>
+            <button class="btn" type="submit">Place order</button>
+          </form>
+        </div>
+        {% if order_feedback %}
+        <div class="order__summary" id="order-feedback" role="status">
+          <p class="eyebrow">Order locked · Ref {{ order_feedback.reference }}</p>
+          <h3>Hey {{ order_feedback.customer_name }}, your {{ order_feedback.bowl }} is queued.</h3>
+          {% if order_feedback.mode_description %}
+          <p>{{ order_feedback.mode_description }}</p>
+          {% endif %}
+          <ul class="summary-list">
+            <li><span>Mode</span><strong>{{ order_feedback.mode }}</strong></li>
+            <li><span>Mood</span><strong>{{ order_feedback.style }}</strong></li>
+            <li><span>Quantity</span><strong>{{ order_feedback.quantity }}</strong></li>
+            <li><span>ETA</span><strong>{{ order_feedback.eta }}</strong></li>
+            {% if order_feedback.price_hint %}
+            <li><span>Guide price</span><strong>{{ order_feedback.price_hint }}</strong></li>
+            {% endif %}
+          </ul>
+          {% if order_feedback.extras %}
+          <p>Boosters: {{ order_feedback.extras | join(', ') }}</p>
+          {% endif %}
+          {% if order_feedback.notes %}
+          <p>Notes: {{ order_feedback.notes }}</p>
+          {% endif %}
+          <p class="order__summary-foot">
+            We will confirm on {{ order_feedback.phone or 'your saved number' }}{% if order_feedback.email %} /
+            {{ order_feedback.email }}{% endif %} within minutes.
+          </p>
+        </div>
+        {% endif %}
+      </section>
+
       <section class="cta" id="contact">
         <div class="cta__content">
-          <p class="eyebrow">Order with love</p>
-          <h2>Call or message us to schedule your bowl pickup.</h2>
+          <p class="eyebrow">Visit or ping us</p>
+          <h2>The Bloom kitchen is open all day.</h2>
           <p>
-            We currently serve fresh bowls for walk-ins, subscriptions, and small events in and around Pune.
-            Give us a buzz and we will prep something vibrant just for you.
+            Walk-in tastings, event catering, and weekly subscriptions are handled directly from our Pune lab.
+            DM us on Instagram @bloombowl or use the links below.
           </p>
           <div class="cta__info">
             <div>
@@ -113,13 +252,13 @@
         <div class="cta__card">
           <p>Open daily · 8 AM – 10 PM</p>
           <p class="cta__highlight">Bulk orders &amp; custom party bowls available.</p>
-          <p>Follow @blooommbowl for the freshest drops.</p>
+          <p>Subscriptions unlock reusable jar rebates.</p>
         </div>
       </section>
     </main>
 
     <footer class="footer">
-      <p>© 2024 Blooomm Bowl · Fresh bowls with love.</p>
+      <p>© 2024 Bloom Bowl · Healthy bowls from the future.</p>
       <a class="ghost-link" href="#top">Back to top ↑</a>
     </footer>
   </body>
