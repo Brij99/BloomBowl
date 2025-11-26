@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Bloom Bowl crafts hyper fresh, nutrient-rich bowls with futuristic flavours and same-day delivery."
+      content="Bloom Bowl crafts hyper-fresh, nutrient-rich bowls with futuristic flavours, immersive imagery, and seamless ordering."
     />
-    <title>Bloom Bowl | Futuristic Healthy Bowls & Ordering</title>
+    <title>Bloom Bowl | Futuristic Health Lab & Ordering</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,22 +25,45 @@
         </a>
         <div class="nav__links">
           <a href="#about">About</a>
+          <a href="#lab">Lab</a>
           <a href="#menu">Bowls</a>
+          <a href="#ritual">Ritual</a>
           <a href="#order">Order</a>
         </div>
         <a class="btn btn--ghost nav__cta" href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
       </nav>
       <div class="hero__inner">
         <div class="hero__text">
-          <p class="eyebrow">Healthy bowl studio · Futuristic glow</p>
-          <h1>Bloom into the future of feel-good food.</h1>
+          <p class="eyebrow">Immune-forward nutrition lab</p>
+          <h1>Chromatic nourishment engineered for longevity.</h1>
           <p class="lead">
-            Sprouts, legumes, fruits, and toppings are activated only after you tap order.
-            Electric deliveries keep every bowl crisp while our colour-forward flavours match your rhythm.
+            Our Pune micro kitchen tracks hydration, circadian cues, and nervous system load to plate bowls that
+            taste like festivals while acting like clinical fuel.
           </p>
           <div class="cta-group">
             <a class="btn" href="#order">Start an order</a>
             <a class="btn btn--ghost" href="#menu">Browse bowls</a>
+          </div>
+          <div class="hero__meta">
+            <span class="neo-pill">Adaptive health menu</span>
+            <p>
+              The Bloom OS recalibrates macros hourly with seasonal botanicals, ancient grains, ferments, and neuro
+              calming textures.
+            </p>
+          </div>
+          <div class="hero__scan" role="list">
+            <div>
+              <span>Heart coherence</span>
+              <strong>94%</strong>
+            </div>
+            <div>
+              <span>Hydration status</span>
+              <strong>+3 pts</strong>
+            </div>
+            <div>
+              <span>Delivery grid</span>
+              <strong>5 km</strong>
+            </div>
           </div>
           <ul class="hero__stats">
             {% for stat in stats %}
@@ -51,31 +74,61 @@
             {% endfor %}
           </ul>
         </div>
-        <div class="hero__card">
-          <p class="hero__badge">Hyper fresh drop</p>
-          <h2>Bloom Bowl Special</h2>
-          <p>
-            Sprout base + citrus mist + neon microgreens + roasted crunch. Made to charge your day with
-            technicolor energy.
-          </p>
-          <ul class="chip-list">
-            <li>24g protein</li>
-            <li>Zero refined sugar</li>
-            <li>Electric delivery</li>
-          </ul>
-          <div class="hero__price">₹70</div>
-          <a class="ghost-link" href="#order">Pre-order now →</a>
+        <div class="hero__media">
+          <div class="hero__gallery">
+            <figure class="hero__frame hero__frame--primary">
+              <img
+                src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80"
+                alt="Colour drenched vegetable bowl with avocado, greens, and seeds"
+                loading="lazy"
+              />
+              <figcaption>Longevity Bowl 07</figcaption>
+            </figure>
+            <figure class="hero__frame hero__frame--secondary">
+              <img
+                src="https://images.unsplash.com/photo-1457530378978-8bac673b8062?auto=format&fit=crop&w=900&q=80"
+                alt="Detox juices in glass bottles with citrus and greens"
+                loading="lazy"
+              />
+              <figcaption>Hydra Smoothie Flight</figcaption>
+            </figure>
+            <div class="hero__pulse">
+              <span>Next glow drop</span>
+              <strong>08:30 AM</strong>
+              <p>6 chilled jars left · tracked via cold chain.</p>
+            </div>
+          </div>
+          <div class="hero__card hero__badge-card">
+            <p class="hero__badge">Live nutrient tracker</p>
+            <h2>Bloom Bowl Special</h2>
+            <p>
+              Sprout base, citrus mist, adaptogenic foam, roasted crunch, and chromatic ferments engineered to calm
+              inflammation and light up your cells.
+            </p>
+            <ul class="chip-list">
+              <li>24g plant protein</li>
+              <li>Electrolyte jelly</li>
+              <li>Electric delivery</li>
+            </ul>
+            <div class="hero__price">₹70</div>
+            <a class="ghost-link" href="#order">Pre-order now →</a>
+          </div>
         </div>
       </div>
       <div class="hero__orb hero__orb--mint"></div>
       <div class="hero__orb hero__orb--violet"></div>
+      <div class="hero__orb hero__orb--rose"></div>
     </header>
 
     <main>
       <section class="features" id="about">
         <div class="section-heading">
           <p class="eyebrow">Why choose Bloom Bowl</p>
-          <h2>Minimal ingredients, maximal future energy.</h2>
+          <h2>Clinical-grade produce, festival-level colour.</h2>
+          <p class="section-subhead">
+            AI-assisted mise en place, zero-glucose spikes, and regenerative sourcing deliver bowls that feel like
+            wellness rituals.
+          </p>
         </div>
         <div class="feature-grid">
           {% for feature in features %}
@@ -84,6 +137,76 @@
             <p>{{ feature.text }}</p>
           </article>
           {% endfor %}
+        </div>
+      </section>
+
+      <section class="vitals" aria-label="Live nutrition vitals">
+        <div class="vitals__intro">
+          <p class="eyebrow">Live vitals</p>
+          <h2>The Bloom dashboard is always on.</h2>
+          <p>
+            Sensors track every bowl’s protein density, hydration, and eco delivery route so you only worry about
+            the flavour.
+          </p>
+        </div>
+        <div class="vitals__grid">
+          {% for stat in stats %}
+          <article class="vitals-card" style="--progress: {{ 60 + loop.index * 9 }}%">
+            <div class="vitals-card__label">{{ stat.label }}</div>
+            <strong>{{ stat.value }}</strong>
+            <div class="vitals-card__bar">
+              <span></span>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="lab" id="lab">
+        <div class="section-heading">
+          <p class="eyebrow">The Bloom lab</p>
+          <h2>Health imagery straight from our kitchen studio.</h2>
+          <p class="section-subhead">
+            Every colour on the plate corresponds to a phytonutrient we log in the Bloom OS for total transparency.
+          </p>
+        </div>
+        <div class="lab__grid">
+          <article class="lab-card">
+            <img
+              src="https://images.unsplash.com/photo-1543353071-873f17a7a088?auto=format&fit=crop&w=1200&q=80"
+              alt="Microgreen salad bowl with vibrant toppings"
+              loading="lazy"
+            />
+            <div class="lab-card__body">
+              <p class="label">Immunity spectrum</p>
+              <h3>Microgreen + ferment combo</h3>
+              <p>Vitamin-C pearls, pickled roots, and activated seeds regulate inflammation markers within minutes.</p>
+            </div>
+          </article>
+          <article class="lab-card">
+            <img
+              src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80"
+              alt="Healthy smoothies and juices with berries"
+              loading="lazy"
+            />
+            <div class="lab-card__body">
+              <p class="label">Hydra flight</p>
+              <h3>Cold-pressed adaptogenic tonics</h3>
+              <p>Blue spirulina, chia tea, and citrus electrolytes rehydrate your cells faster than bottled drinks.</p>
+            </div>
+          </article>
+          <article class="lab-card">
+            <img
+              src="https://images.unsplash.com/photo-1484980972926-edee96e0960d?auto=format&fit=crop&w=1200&q=80"
+              alt="Colourful healthy platter with grains and vegetables"
+              loading="lazy"
+            />
+            <div class="lab-card__body">
+              <p class="label">Metabolic bento</p>
+              <h3>Fiber-loaded futurist platter</h3>
+              <p>Legume pate, roasted roots, and citrus foam maintain satiety for 6+ hours without heaviness.</p>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -114,14 +237,50 @@
         </div>
       </section>
 
+      <section class="ritual" id="ritual">
+        <div class="section-heading">
+          <p class="eyebrow">Bloom ritual</p>
+          <h2>Your bowl’s journey from scan to spoon.</h2>
+          <p class="section-subhead">
+            It’s a four-step choreography that keeps nutrients intact and the experience ultra futuristic.
+          </p>
+        </div>
+        <div class="ritual__grid">
+          <article class="ritual-step">
+            <div class="ritual-step__index">01</div>
+            <h3>Pulse scan</h3>
+            <p>We log your mood, hydration, and cravings before assigning a sprout + sauce matrix.</p>
+          </article>
+          <article class="ritual-step">
+            <div class="ritual-step__index">02</div>
+            <h3>Chef-lab assembly</h3>
+            <p>Robotic mise-en-place meets human plating so every texture lands exactly where it should.</p>
+          </article>
+          <article class="ritual-step">
+            <div class="ritual-step__index">03</div>
+            <h3>Cold-chain capsule</h3>
+            <p>Bowl locks, reusable jars, and insulated sleeves keep enzymes alive during transit.</p>
+          </article>
+          <article class="ritual-step">
+            <div class="ritual-step__index">04</div>
+            <h3>Glow check-in</h3>
+            <p>Our team pings you with serving suggestions and listens to your nervous system feedback.</p>
+          </article>
+        </div>
+        <div class="ritual__panel">
+          <p>Weekly ritual subscribers receive adaptive macros, free jar swaps, and early drops of seasonal specials.</p>
+          <a class="ghost-link" href="#order">Book a ritual slot →</a>
+        </div>
+      </section>
+
       <section class="order" id="order">
         <div class="order__grid">
           <div class="order__lead">
             <p class="eyebrow">Order online</p>
             <h2>Tap in your vibe and we craft the bowl.</h2>
             <p>
-              Answer a few prompts below so our kitchen AI and chef team can prep, pack, and send your bowl with
-              the right crunch level.
+              Answer a few prompts below so our kitchen AI and chef team can prep, pack, and send your bowl with the
+              right crunch level.
             </p>
             <ul class="service-modes">
               {% for mode in service_modes %}
@@ -231,8 +390,8 @@
           <p class="eyebrow">Visit or ping us</p>
           <h2>The Bloom kitchen is open all day.</h2>
           <p>
-            Walk-in tastings, event catering, and weekly subscriptions are handled directly from our Pune lab.
-            DM us on Instagram @bloombowl or use the links below.
+            Walk-in tastings, event catering, and weekly subscriptions are handled directly from our Pune lab. DM us
+            on Instagram @bloombowl or use the links below.
           </p>
           <div class="cta__info">
             <div>
@@ -258,7 +417,7 @@
     </main>
 
     <footer class="footer">
-      <p>© 2024 Bloom Bowl · Healthy bowls from the future.</p>
+      <p>© 2024 Bloom Bowl · Bio futuristic health bowls.</p>
       <a class="ghost-link" href="#top">Back to top ↑</a>
     </footer>
   </body>
