@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BloomBowl - Fresh Sprouts and Juicy Fruits Everyday. Healthy, delicious bowls made with love.">
+    <meta name="keywords" content="BloomBowl, sprout bowls, fruit bowls, paneer bowls, healthy food, fresh sprouts">
+    <meta name="author" content="BloomBowl">
+    <meta property="og:title" content="BloomBowl — Fresh Sprouts & Juicy Fruits Everyday">
+    <meta property="og:description" content="Healthy, delicious bowls crafted with the freshest ingredients.">
+    <meta property="og:type" content="website">
+    <title>BloomBowl — Fresh Sprouts & Juicy Fruits Everyday</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="website/css/style.css">
+</head>
+
+<body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Cursor Glow (desktop only) -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Floating Particles Background -->
+    <div class="particles" id="particles" aria-hidden="true"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main Navigation">
+        <div class="container nav-container">
+            <a href="#home" class="nav-logo" aria-label="BloomBowl Home">
+                <img src="static/images/logo.jpg" alt="BloomBowl Logo" class="logo-img" width="46" height="46">
+                <div class="logo-text">
+                    <span class="logo-name">BLOOMBOWL</span>
+                    <span class="logo-tagline">Fresh Sprouts & Juicy Fruits</span>
+                </div>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#menu" class="nav-link">Menu</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#testimonials" class="nav-link">Reviews</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#order" class="nav-link btn-order-nav">Order Now</a>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i
+                        class="fa-solid fa-moon"></i></button>
+                <button class="nav-toggle" id="navToggle" aria-label="Toggle menu"><i
+                        class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Video Background -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <video autoplay muted loop playsinline class="hero-video" poster="static/images/hero.png">
+                <source src="https://videos.pexels.com/video-files/3195394/3195394-uhd_2560_1440_25fps.mp4"
+                    type="video/mp4">
+            </video>
+            <img src="static/images/hero.png" alt="BloomBowl Healthy Bowls" class="hero-fallback-img">
+        </div>
+        <div class="hero-overlay"></div>
+        <!-- Hero Floating Elements -->
+        <div class="hero-float hero-float-1" aria-hidden="true">🌱</div>
+        <div class="hero-float hero-float-2" aria-hidden="true">🍓</div>
+        <div class="hero-float hero-float-3" aria-hidden="true">🥗</div>
+        <div class="hero-float hero-float-4" aria-hidden="true">🌿</div>
+        <div class="container hero-content">
+            <img src="static/images/logo.jpg" alt="BloomBowl Logo" class="hero-logo">
+            <div class="hero-badge" data-reveal="up"><i class="fa-solid fa-leaf"></i> 100% Fresh & Natural</div>
+            <h1 class="hero-title" data-reveal="up" data-delay="1">
+                Start Your Day<br>
+                with a <span class="text-accent typed-text"
+                    data-words='["Bloom Bowl","Fresh Start","Healthy Life"]'>Bloom Bowl</span>
+            </h1>
+            <p class="hero-subtitle" data-reveal="up" data-delay="2">Fresh sprouts, juicy fruits, and wholesome goodness
+                — crafted to fuel your health,
+                served with love every single day.</p>
+            <div class="hero-actions" data-reveal="up" data-delay="3">
+                <a href="#menu" class="btn btn-primary btn-lg magnetic-btn"><i class="fa-solid fa-utensils"></i> Explore
+                    Menu</a>
+                <a href="https://wa.me/918849570610" target="_blank" class="btn btn-whatsapp btn-lg magnetic-btn"><i
+                        class="fa-brands fa-whatsapp"></i> Order on WhatsApp</a>
+            </div>
+            <div class="hero-features" data-reveal="up" data-delay="4">
+                <div class="hero-feature"><i class="fa-solid fa-leaf"></i><span>100% Fresh</span></div>
+                <div class="hero-feature"><i class="fa-solid fa-heart"></i><span>Healthy</span></div>
+                <div class="hero-feature"><i class="fa-solid fa-bolt"></i><span>High Protein</span></div>
+                <div class="hero-feature"><i class="fa-solid fa-truck-fast"></i><span>Fast Delivery</span></div>
+            </div>
+        </div>
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span>Scroll Down</span>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="container stats-grid">
+            <div class="stat-item" data-scroll="zoom"><span class="stat-num" data-count="1000">0</span><span
+                    class="stat-label">Happy Customers</span></div>
+            <div class="stat-item" data-scroll="zoom"><span class="stat-num" data-count="15">0</span><span
+                    class="stat-label">Menu Items</span></div>
+            <div class="stat-item" data-scroll="zoom"><span class="stat-num" data-count="4">0</span><span
+                    class="stat-label">Categories</span></div>
+            <div class="stat-item" data-scroll="zoom"><span class="stat-num">4.9 ⭐</span><span
+                    class="stat-label">Customer Rating</span></div>
+        </div>
+    </section>
+
+    <!-- ═══ Image Marquee Slider ═══ -->
+    <section class="marquee-section" aria-label="Our bowls gallery">
+        <div class="marquee-track">
+            <div class="marquee-slide"><img src="static/images/sprout_bowl.png" alt="Sprout Bowl"><span
+                    class="marquee-label">Sprout Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/fruit_bowl.png" alt="Fruit Bowl"><span
+                    class="marquee-label">Fruit Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/paneer_bowl.png" alt="Paneer Bowl"><span
+                    class="marquee-label">Paneer Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/sweetcorn_bowl.png" alt="Sweetcorn"><span
+                    class="marquee-label">Sweetcorn</span></div>
+            <div class="marquee-slide"><img src="static/images/sprout_bowl.png" alt="Sprout Bowl"><span
+                    class="marquee-label">Sprout Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/fruit_bowl.png" alt="Fruit Bowl"><span
+                    class="marquee-label">Fruit Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/paneer_bowl.png" alt="Paneer Bowl"><span
+                    class="marquee-label">Paneer Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/sweetcorn_bowl.png" alt="Sweetcorn"><span
+                    class="marquee-label">Sweetcorn</span></div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="section menu-section" id="menu">
+        <div class="container">
+            <div class="section-header" data-scroll="up">
+                <span class="section-tag"><i class="fa-solid fa-utensils"></i> OUR MENU</span>
+                <h2 class="section-title split-text">Freshness in Every <span class="text-accent">Bowl</span></h2>
+                <p class="section-subtitle">Handcrafted bowls with the freshest ingredients — from sprouts to fruits,
+                    we've got your healthy cravings covered</p>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="menu-tabs" id="menuTabs" data-scroll="up">
+                <button class="menu-tab active" data-category="all">🍽️ All Items</button>
+                <button class="menu-tab" data-category="sprout_bowls">🌱 Sprout Bowls</button>
+                <button class="menu-tab" data-category="bloom_special">⭐ Bloom Special</button>
+                <button class="menu-tab" data-category="fruit_bowls">🍓 Fruit Bowls</button>
+                <button class="menu-tab" data-category="paneer_bowls">🧀 Paneer Bowls</button>
+            </div>
+
+            <!-- Sprout Bowls -->
+            <div class="menu-category" id="cat-sprout_bowls" data-cat="sprout_bowls">
+                <div class="category-header" data-scroll="left">
+                    <div class="category-img"><img src="static/images/sprout_bowl.png" alt="Sprout Bowls"></div>
+                    <div class="category-info">
+                        <span class="category-icon">🌱</span>
+                        <h3 class="category-title">Sprout Bowls</h3>
+                        <p class="category-desc">Fresh, nutritious sprouts packed with protein and vitamins</p>
+                    </div>
+                </div>
+                <div class="menu-items-grid">
+                    <div class="menu-item popular" data-scroll="up" data-stagger="0">
+                        <span class="popular-badge"><i class="fa-solid fa-fire"></i> Popular</span>
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Sprouts Bowl (With Salad)</h4>
+                            <p class="menu-item-desc">Fresh moong sprouts topped with crunchy salad, onion, tomato &
+                                tangy lemon dressing</p>
+                        </div>
+                        <div class="menu-item-price">₹55</div>
+                    </div>
+                    <div class="menu-item" data-scroll="up" data-stagger="1">
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Sprouts Bowl (Plain)</h4>
+                            <p class="menu-item-desc">Simple and wholesome steamed sprouts with light seasoning</p>
+                        </div>
+                        <div class="menu-item-price">₹45</div>
+                    </div>
+                    <div class="menu-item popular" data-scroll="up" data-stagger="2">
+                        <span class="popular-badge"><i class="fa-solid fa-fire"></i> Popular</span>
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Chana Bowl (With Salad)</h4>
+                            <p class="menu-item-desc">Protein-rich chana (chickpea) sprouts with fresh garden salad</p>
+                        </div>
+                        <div class="menu-item-price">₹55</div>
+                    </div>
+                    <div class="menu-item" data-scroll="up" data-stagger="3">
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Peanut (Sing) Bowl</h4>
+                            <p class="menu-item-desc">Crunchy boiled peanuts with spices, onion & fresh herbs</p>
+                        </div>
+                        <div class="menu-item-price">₹55</div>
+                    </div>
+                    <div class="menu-item popular" data-scroll="up" data-stagger="4">
+                        <span class="popular-badge"><i class="fa-solid fa-fire"></i> Popular</span>
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Mix Bowl (Sprouts & Chana)</h4>
+                            <p class="menu-item-desc">Best of both worlds — mixed moong sprouts and chana with salad</p>
+                        </div>
+                        <div class="menu-item-price">₹55</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloom Special -->
+            <div class="menu-category" id="cat-bloom_special" data-cat="bloom_special">
+                <div class="category-header" data-scroll="right">
+                    <div class="category-img"><img src="static/images/sprout_bowl.png" alt="Bloom Bowl Special"></div>
+                    <div class="category-info">
+                        <span class="category-icon">⭐</span>
+                        <h3 class="category-title">Bloom Bowl Special</h3>
+                        <p class="category-desc">Our signature creation — the ultimate healthy bowl</p>
+                    </div>
+                </div>
+                <div class="menu-items-grid">
+                    <div class="menu-item popular" data-scroll="up" data-stagger="0">
+                        <span class="popular-badge"><i class="fa-solid fa-fire"></i> Popular</span>
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Bloom Bowl Special</h4>
+                            <p class="menu-item-desc">Our signature bowl with sprouts, chana, peanuts, salad, special
+                                dressing & toppings</p>
+                        </div>
+                        <div class="menu-item-price">₹70</div>
+                    </div>
+                    <div class="menu-item popular" data-scroll="up" data-stagger="1">
+                        <span class="popular-badge"><i class="fa-solid fa-fire"></i> Popular</span>
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Sweetcorn Salad</h4>
+                            <p class="menu-item-desc">Sweet golden corn kernels tossed with fresh veggies and zesty
+                                dressing</p>
+                        </div>
+                        <div class="menu-item-price">₹60</div>
+                    </div>
+                    <div class="menu-item" data-scroll="up" data-stagger="2">
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Sweetcorn Butter</h4>
+                            <p class="menu-item-desc">Hot buttered sweetcorn with a sprinkle of spices</p>
+                        </div>
+                        <div class="menu-item-price">₹50</div>
+                    </div>
+                    <div class="menu-item" data-scroll="up" data-stagger="3">
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Sweetcorn Plain</h4>
+                            <p class="menu-item-desc">Simple steamed sweetcorn — pure and natural</p>
+                        </div>
+                        <div class="menu-item-price">₹40</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fruit Bowls -->
+            <div class="menu-category" id="cat-fruit_bowls" data-cat="fruit_bowls">
+                <div class="category-header" data-scroll="left">
+                    <div class="category-img"><img src="static/images/fruit_bowl.png" alt="Fruit Bowls"></div>
+                    <div class="category-info">
+                        <span class="category-icon">🍓</span>
+                        <h3 class="category-title">Fruit Bowls</h3>
+                        <p class="category-desc">Seasonal fruits bursting with natural sweetness</p>
+                    </div>
+                </div>
+                <div class="menu-items-grid">
+                    <div class="menu-item" data-scroll="up" data-stagger="0">
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Small Bowl</h4>
+                            <p class="menu-item-desc">A refreshing mix of seasonal fresh fruits — perfect light snack
+                            </p>
+                        </div>
+                        <div class="menu-item-price">₹80</div>
+                    </div>
+                    <div class="menu-item popular" data-scroll="up" data-stagger="1">
+                        <span class="popular-badge"><i class="fa-solid fa-fire"></i> Popular</span>
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Big Bowl</h4>
+                            <p class="menu-item-desc">Generous portion of assorted seasonal fruits — a feast of
+                                freshness</p>
+                        </div>
+                        <div class="menu-item-price">₹100</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paneer Bowls -->
+            <div class="menu-category" id="cat-paneer_bowls" data-cat="paneer_bowls">
+                <div class="category-header" data-scroll="right">
+                    <div class="category-img"><img src="static/images/paneer_bowl.png" alt="Paneer Bowls"></div>
+                    <div class="category-info">
+                        <span class="category-icon">🧀</span>
+                        <h3 class="category-title">Paneer Bowls</h3>
+                        <p class="category-desc">Protein-packed bowls with fresh paneer cubes</p>
+                    </div>
+                </div>
+                <div class="menu-items-grid">
+                    <div class="menu-item popular" data-scroll="up" data-stagger="0">
+                        <span class="popular-badge"><i class="fa-solid fa-fire"></i> Popular</span>
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Sprout / Chana / Peanut Bowl with Paneer</h4>
+                            <p class="menu-item-desc">Your choice of sprout, chana, or peanut bowl topped with fresh
+                                paneer cubes</p>
+                        </div>
+                        <div class="menu-item-price">₹100</div>
+                    </div>
+                    <div class="menu-item" data-scroll="up" data-stagger="1">
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Mix Bowl Paneer</h4>
+                            <p class="menu-item-desc">Mixed sprouts and chana bowl loaded with paneer cubes & dressing
+                            </p>
+                        </div>
+                        <div class="menu-item-price">₹110</div>
+                    </div>
+                    <div class="menu-item popular" data-scroll="up" data-stagger="2">
+                        <span class="popular-badge"><i class="fa-solid fa-fire"></i> Popular</span>
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">Bloombowl with Paneer</h4>
+                            <p class="menu-item-desc">Our signature Bloom Bowl elevated with generous paneer — the
+                                ultimate bowl</p>
+                        </div>
+                        <div class="menu-item-price">₹120</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Parallax Video CTA Strip ═══ -->
+    <section class="parallax-cta">
+        <video autoplay muted loop playsinline class="parallax-video" poster="static/images/hero.png">
+            <source src="https://videos.pexels.com/video-files/1448735/1448735-hd_1920_1080_24fps.mp4" type="video/mp4">
+        </video>
+        <div class="parallax-overlay"></div>
+        <div class="container parallax-content" data-scroll="zoom">
+            <h2 class="parallax-title split-text">Freshness You Can <span class="text-accent">Taste</span></h2>
+            <p class="parallax-desc">Every bowl is prepared fresh with hand-picked ingredients, served within minutes
+            </p>
+            <a href="#order" class="btn btn-primary btn-lg magnetic-btn"><i class="fa-solid fa-shopping-bag"></i> Order
+                Now</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about-section" id="about">
+        <div class="container about-grid">
+            <div class="about-images" data-scroll="left">
+                <div class="about-img-grid">
+                    <img src="static/images/sprout_bowl.png" alt="Sprout Bowl" class="about-img img-1 hover-3d">
+                    <img src="static/images/fruit_bowl.png" alt="Fruit Bowl" class="about-img img-2 hover-3d">
+                    <img src="static/images/sweetcorn_bowl.png" alt="Sweetcorn Bowl" class="about-img img-3 hover-3d">
+                    <img src="static/images/paneer_bowl.png" alt="Paneer Bowl" class="about-img img-4 hover-3d">
+                </div>
+            </div>
+            <div class="about-content" data-scroll="right">
+                <span class="section-tag"><i class="fa-solid fa-heart"></i> OUR STORY</span>
+                <h2 class="section-title split-text">Why <span class="text-accent">BloomBowl</span>?</h2>
+                <p class="about-text">At BloomBowl, we believe that healthy food should be delicious, affordable, and
+                    accessible to everyone. Every bowl we prepare is made with the freshest sprouts, seasonal fruits,
+                    and carefully selected ingredients.</p>
+                <p class="about-text">Our mission is simple — to help you bloom from within, one bowl at a time. No
+                    preservatives, no artificial flavors — just pure, natural goodness delivered to your doorstep.</p>
+                <div class="about-features">
+                    <div class="about-feature" data-scroll="up" data-stagger="0">
+                        <div class="feature-icon"><i class="fa-solid fa-seedling"></i></div>
+                        <div>
+                            <h4>Farm Fresh</h4>
+                            <p>Fresh sprouts prepared daily</p>
+                        </div>
+                    </div>
+                    <div class="about-feature" data-scroll="up" data-stagger="1">
+                        <div class="feature-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                        <div>
+                            <h4>FSSAI Certified</h4>
+                            <p>License: 20725037004180</p>
+                        </div>
+                    </div>
+                    <div class="about-feature" data-scroll="up" data-stagger="2">
+                        <div class="feature-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                        <div>
+                            <h4>Made with Love</h4>
+                            <p>Hygienically prepared bowls</p>
+                        </div>
+                    </div>
+                    <div class="about-feature" data-scroll="up" data-stagger="3">
+                        <div class="feature-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                        <div>
+                            <h4>Affordable</h4>
+                            <p>Starting from just ₹40</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Reverse Marquee ═══ -->
+    <section class="marquee-section marquee-reverse" aria-label="Bowl gallery reverse">
+        <div class="marquee-track marquee-track-reverse">
+            <div class="marquee-slide"><img src="static/images/paneer_bowl.png" alt="Paneer Bowl"><span
+                    class="marquee-label">Paneer Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/sweetcorn_bowl.png" alt="Sweetcorn"><span
+                    class="marquee-label">Sweetcorn</span></div>
+            <div class="marquee-slide"><img src="static/images/fruit_bowl.png" alt="Fruit Bowl"><span
+                    class="marquee-label">Fruit Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/sprout_bowl.png" alt="Sprout Bowl"><span
+                    class="marquee-label">Sprout Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/paneer_bowl.png" alt="Paneer Bowl"><span
+                    class="marquee-label">Paneer Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/sweetcorn_bowl.png" alt="Sweetcorn"><span
+                    class="marquee-label">Sweetcorn</span></div>
+            <div class="marquee-slide"><img src="static/images/fruit_bowl.png" alt="Fruit Bowl"><span
+                    class="marquee-label">Fruit Bowls</span></div>
+            <div class="marquee-slide"><img src="static/images/sprout_bowl.png" alt="Sprout Bowl"><span
+                    class="marquee-label">Sprout Bowls</span></div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section testimonials-section" id="testimonials">
+        <div class="container">
+            <div class="section-header" data-scroll="up">
+                <span class="section-tag"><i class="fa-solid fa-star"></i> REVIEWS</span>
+                <h2 class="section-title split-text">What Our Customers <span class="text-accent">Say</span></h2>
+                <p class="section-subtitle">Don't just take our word — hear from our happy bowl-lovers</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card" data-scroll="up" data-stagger="0">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"The Bloom Bowl Special is my go-to breakfast! Fresh, healthy, and
+                        incredibly delicious. Love the quality!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">P</div>
+                        <span class="author-name">Priya S.</span>
+                    </div>
+                </div>
+                <div class="testimonial-card" data-scroll="up" data-stagger="1">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Best sprout bowls in town! The mix bowl with paneer is absolutely
+                        amazing. Highly recommend!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">R</div>
+                        <span class="author-name">Rahul M.</span>
+                    </div>
+                </div>
+                <div class="testimonial-card" data-scroll="up" data-stagger="2">
+                    <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Finally a healthy food option that actually tastes great. The fruit
+                        bowls are always fresh and generous."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">A</div>
+                        <span class="author-name">Anita K.</span>
+                    </div>
+                </div>
+                <div class="testimonial-card" data-scroll="up" data-stagger="3">
+                    <div class="testimonial-stars">⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Started my fitness journey with BloomBowl. The sweetcorn salad is a
+                        game-changer. Keep it up!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">V</div>
+                        <span class="author-name">Vikram P.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order / CTA Section -->
+    <section class="section order-section" id="order">
+        <div class="container order-grid">
+            <div class="order-info" data-scroll="left">
+                <span class="section-tag tag-white"><i class="fa-solid fa-phone"></i> ORDER NOW</span>
+                <h2 class="order-title split-text">Ready to Start Your<br><span class="text-accent">Healthy
+                        Journey</span>?</h2>
+                <p class="order-subtitle">Order directly via WhatsApp or give us a call. We deliver fresh bowls right to
+                    your doorstep!</p>
+                <div class="order-buttons">
+                    <a href="https://wa.me/918849570610" target="_blank" class="btn btn-whatsapp btn-lg magnetic-btn"><i
+                            class="fa-brands fa-whatsapp"></i> WhatsApp: +91 8849570610</a>
+                    <a href="tel:+918849570610" class="btn btn-outline-white btn-lg magnetic-btn"><i
+                            class="fa-solid fa-phone"></i> Call Now</a>
+                </div>
+            </div>
+            <div class="order-form-container" data-scroll="right">
+                <form class="order-form" id="orderForm">
+                    <h3><i class="fa-solid fa-paper-plane"></i> Quick Order</h3>
+                    <div class="form-group">
+                        <label for="name">Your Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your name"
+                            class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="+91 XXXXX XXXXX"
+                            class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="items">What would you like to order?</label>
+                        <textarea id="items" name="items" placeholder="e.g., 2x Bloom Bowl Special, 1x Fruit Bowl Big"
+                            class="form-input form-textarea" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-full magnetic-btn"><i
+                            class="fa-solid fa-check-circle"></i> Place Order</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact-section" id="contact">
+        <div class="container">
+            <div class="section-header" data-scroll="up">
+                <span class="section-tag"><i class="fa-solid fa-location-dot"></i> CONTACT</span>
+                <h2 class="section-title split-text">Get in <span class="text-accent">Touch</span></h2>
+            </div>
+            <div class="contact-cards">
+                <div class="contact-card" data-scroll="up" data-stagger="0">
+                    <div class="contact-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                    <h4>WhatsApp</h4>
+                    <a href="https://wa.me/918849570610">+91 8849570610</a>
+                </div>
+                <div class="contact-card" data-scroll="up" data-stagger="1">
+                    <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                    <h4>Call Us</h4>
+                    <a href="tel:+918849570610">+91 8849570610</a>
+                </div>
+                <div class="contact-card" data-scroll="up" data-stagger="2">
+                    <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+                    <h4>Hours</h4>
+                    <p>7:00 AM – 10:00 PM<br>Open Daily</p>
+                </div>
+                <div class="contact-card" data-scroll="up" data-stagger="3">
+                    <div class="contact-icon"><i class="fa-solid fa-certificate"></i></div>
+                    <h4>FSSAI</h4>
+                    <p>20725037004180</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo-row">
+                        <img src="static/images/logo.jpg" alt="BloomBowl" class="footer-logo-img">
+                        <span class="footer-logo">BLOOMBOWL</span>
+                    </div>
+                    <p>Fresh Sprouts and Juicy Fruits Everyday</p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/918849570610" target="_blank" aria-label="WhatsApp"><i
+                                class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="#menu">Menu</a>
+                    <a href="#about">About Us</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Popular Items</h4>
+                    <a href="#menu">Bloom Bowl Special ₹70</a>
+                    <a href="#menu">Sprouts Bowl ₹55</a>
+                    <a href="#menu">Fruit Bowl ₹80</a>
+                    <a href="#menu">Paneer Bowl ₹100</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BloomBowl. All rights reserved. Made with <i class="fa-solid fa-heart"
+                        style="color:#e74c3c"></i> | FSSAI: 20725037004180</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+    <!-- WhatsApp Float -->
+    <a href="https://wa.me/918849570610" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp"><i
+            class="fa-brands fa-whatsapp"></i></a>
+
+    <script src="website/js/main.js"></script>
+</body>
+
+</html>
