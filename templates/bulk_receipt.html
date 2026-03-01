@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloomBowl — Bulk Receipt Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <style>
+        .bulk-page {
+            padding: 6rem 0 3rem;
+            min-height: 100vh;
+            background: var(--bg-warm);
+        }
+
+        .bulk-page .container {
+            max-width: 1200px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            color: var(--green-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--green-600);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-link:hover {
+            color: var(--green-800);
+        }
+
+        /* Upload Card */
+        .upload-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+
+        /* Input Method Tabs */
+        .input-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--green-100);
+            padding-bottom: 0;
+        }
+
+        .input-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.65rem 1.3rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-family: var(--font);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: -2px;
+        }
+
+        .input-tab:hover {
+            color: var(--green-600);
+        }
+
+        .input-tab.active {
+            color: var(--green-700);
+            border-bottom-color: var(--green-500);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Paste Data */
+        .paste-textarea {
+            width: 100%;
+            min-height: 200px;
+            border: 2px solid var(--green-200);
+            border-radius: var(--radius);
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            resize: vertical;
+            background: var(--green-50);
+            color: var(--text);
+            transition: var(--transition);
+            tab-size: 16;
+        }
+
+        .paste-textarea:focus {
+            outline: none;
+            border-color: var(--green-400);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+
+        .paste-textarea::placeholder {
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .paste-hint {
+            background: var(--green-50);
+            border: 1px solid var(--green-200);
+            border-radius: var(--radius-sm);
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .paste-hint p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .paste-stats {
+            font-size: 0.78rem;
+            color: var(--green-600);
+            font-weight: 600;
+            margin-top: 0.5rem;
+            min-height: 1.2rem;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.3rem;
+            background: white;
+            color: var(--green-600);
+            border: 2px solid var(--green-300);
+            border-radius: 50px;
+            font-family: var(--font);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-outline:hover {
+            background: var(--green-50);
+            border-color: var(--green-400);
+        }
+
+        .upload-card h2 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--green-800);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-card h2 i {
+            color: var(--green-500);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--green-300);
+            border-radius: var(--radius);
+            padding: 2rem;
+            text-align: center;
+            background: var(--green-50);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: var(--green-400);
+            background: var(--green-100);
+        }
+
+        .upload-area input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-area i {
+            font-size: 2.5rem;
+            color: var(--green-400);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .upload-area p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .upload-area .file-name {
+            font-weight: 700;
+            color: var(--green-700);
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .upload-row {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .format-hint {
+            background: var(--green-50);
+            border: 1px solid var(--green-200);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .format-hint h4 {
+            font-size: 0.85rem;
+            color: var(--green-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .format-hint p {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .format-hint code {
+            background: var(--green-100);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--green-800);
+        }
+
+        /* Summary Bar */
+        .summary-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            border: 1px solid var(--card-border);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .summary-card .num {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--green-700);
+        }
+
+        .summary-card .label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        /* Print All Bar */
+        .print-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .print-bar h3 {
+            font-size: 1rem;
+            color: var(--green-800);
+        }
+
+        .print-bar .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Receipt Grid - All Receipts */
+
+        .receipt-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem;
+            page-break-after: always;
+            break-after: page;
+        }
+
+        .receipt-card:last-child {
+            page-break-after: auto;
+            break-after: auto;
+        }
+
+        .receipt-logo-area {
+            text-align: center;
+            margin-bottom: 1.2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px dashed var(--green-200);
+        }
+
+        .receipt-logo-area img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 0.5rem;
+            display: block;
+        }
+
+        .receipt-logo-area h2 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            color: var(--green-800);
+            margin-bottom: 0.1rem;
+        }
+
+        .receipt-logo-area p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .receipt-logo-area .receipt-tagline {
+            color: var(--green-600);
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+
+        .receipt-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .receipt-meta-item {
+            font-size: 0.78rem;
+        }
+
+        .receipt-meta-item strong {
+            color: var(--green-800);
+            display: block;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .receipt-meta-item span {
+            color: var(--text-secondary);
+        }
+
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0.75rem;
+        }
+
+        .receipt-table thead th {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--green-200);
+            padding: 0.4rem 0.3rem;
+            text-align: left;
+        }
+
+        .receipt-table thead th:nth-child(3),
+        .receipt-table thead th:nth-child(4),
+        .receipt-table thead th:last-child {
+            text-align: right;
+        }
+
+        .receipt-table tbody td {
+            font-size: 0.82rem;
+            padding: 0.45rem 0.3rem;
+            border-bottom: 1px solid #f0f0e8;
+            color: var(--text);
+        }
+
+        .receipt-table tbody td:first-child {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .receipt-table tbody td:nth-child(3),
+        .receipt-table tbody td:nth-child(4),
+        .receipt-table tbody td:last-child {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .receipt-totals {
+            border-top: 2px dashed var(--green-200);
+            padding-top: 0.75rem;
+        }
+
+        .receipt-total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.2rem 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .receipt-total-row.grand-total {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--green-800);
+            padding-top: 0.4rem;
+            margin-top: 0.2rem;
+            border-top: 2px solid var(--green-300);
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 2px dashed var(--green-200);
+        }
+
+        .receipt-footer p {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-bottom: 0.15rem;
+        }
+
+        .receipt-footer .thank-you {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--green-700);
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .receipt-footer .contact-line {
+            color: var(--green-600);
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+
+        /* Flash messages */
+        .flash-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 420px;
+        }
+
+        .flash-message {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.2rem;
+            border-radius: var(--radius);
+            backdrop-filter: blur(20px);
+            cursor: pointer;
+            animation: slideIn 0.4s ease;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .flash-success {
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: var(--green-700);
+        }
+
+        .flash-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #dc2626;
+        }
+
+        .flash-close {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            margin-left: auto;
+        }
+
+        /* 2-column layout for receipts */
+        .receipts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Download button on each receipt */
+        .receipt-card {
+            position: relative;
+        }
+
+        .receipt-download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.45rem 1rem;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .receipt-download-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .receipt-download-btn:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .receipt-download-btn.downloading {
+            background: linear-gradient(135deg, #94a3b8, #64748b);
+        }
+
+        .btn-download-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.55rem 1.3rem;
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-download-all:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+        }
+
+        .btn-download-all:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .download-progress {
+            font-size: 0.82rem;
+            color: var(--green-700);
+            font-weight: 600;
+        }
+
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .receipts-container,
+            .receipts-container * {
+                visibility: visible;
+            }
+
+            .receipts-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            .receipts-grid {
+                display: block;
+            }
+
+            .navbar,
+            .flash-container,
+            .upload-card,
+            .summary-bar,
+            .print-bar,
+            .footer,
+            .back-link,
+            .page-header,
+            .receipt-download-btn {
+                display: none !important;
+            }
+
+            .receipt-card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                margin-bottom: 0;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .summary-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .receipts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .print-bar {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="nav-logo">
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="BloomBowl Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-name">BLOOMBOWL</span>
+                    <span class="logo-tagline">Fresh Sprouts & Juicy Fruits</span>
+                </div>
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('receipt') }}" class="nav-link">Single Receipt</a>
+                <a href="{{ url_for('bulk_receipt') }}" class="nav-link active">Bulk Receipts</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}" onclick="this.remove()">
+            <span>{{ message }}</span>
+            <button class="flash-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <section class="bulk-page">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to
+                Website</a>
+            <div class="page-header">
+                <h1><i class="fa-solid fa-file-excel" style="color:var(--green-500)"></i> Bulk Receipt Generator</h1>
+                <p>Upload your Excel file and generate receipts for all customers at once</p>
+            </div>
+
+            <!-- Input Method Tabs -->
+            <div class="upload-card">
+                <div class="input-tabs">
+                    <button class="input-tab active" onclick="switchTab('upload')" id="tabUpload">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Upload Excel
+                    </button>
+                    <button class="input-tab" onclick="switchTab('paste')" id="tabPaste">
+                        <i class="fa-solid fa-paste"></i> Paste Data
+                    </button>
+                </div>
+
+                <!-- Tab 1: Upload Excel -->
+                <div class="tab-content active" id="contentUpload">
+                    <form method="POST" action="{{ url_for('bulk_receipt') }}" enctype="multipart/form-data"
+                        id="uploadForm">
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" name="excel_file" id="excelFile" accept=".xlsx,.xls" required>
+                            <i class="fa-solid fa-file-excel"></i>
+                            <p><strong>Click to upload</strong> or drag & drop your Excel file</p>
+                            <p style="font-size:0.78rem; color:var(--text-muted)">.xlsx or .xls files supported</p>
+                            <p class="file-name" id="fileName"></p>
+                        </div>
+                        <div class="upload-row">
+                            <button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-bolt"></i>
+                                Generate
+                                All Receipts</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Tab 2: Paste Data -->
+                <div class="tab-content" id="contentPaste">
+                    <form method="POST" action="{{ url_for('bulk_receipt') }}" id="pasteForm">
+                        <div class="paste-hint">
+                            <p><i class="fa-solid fa-circle-info" style="color:var(--green-500)"></i>
+                                <strong>Copy cells from Excel</strong> (including headers) and paste below.
+                                Data is auto-detected as tab-separated values.
+                            </p>
+                        </div>
+                        <textarea name="paste_data" id="pasteArea" class="paste-textarea"
+                            placeholder="DATE&#9;Customer&#9;Product&#9;Price&#10;16 Feb 26&#9;Aditi Chobey&#9;Big fruit bowl&#9;100&#10;16 Feb 26&#9;Zeel Patel&#9;Bloom bowl special&#9;70"
+                            rows="12"></textarea>
+                        <div class="paste-stats" id="pasteStats"></div>
+                        <div class="upload-row">
+                            <button type="submit" class="btn btn-primary btn-lg"><i class="fa-solid fa-bolt"></i>
+                                Generate
+                                All Receipts</button>
+                            <button type="button" class="btn btn-outline" onclick="clearPasteArea()"><i
+                                    class="fa-solid fa-eraser"></i> Clear</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="format-hint">
+                    <h4><i class="fa-solid fa-circle-info"></i> Expected Format</h4>
+                    <p>Your data should have these column headers in the <strong>first row</strong>:</p>
+                    <p style="margin-top:0.4rem">
+                        <code>Date</code> (optional) &nbsp;
+                        <code>Customer</code> (required) &nbsp;
+                        <code>Product</code> (item name) &nbsp;
+                        <code>Qty</code> (quantity) &nbsp;
+                        <code>Price</code> (unit price) &nbsp;
+                        <code>Amount</code> (optional) &nbsp;
+                        <code>Phone</code> (optional)
+                    </p>
+                    <p style="margin-top:0.4rem">💡 If two rows have the <strong>same customer name</strong>, their
+                        orders will be <strong>merged into one receipt</strong>.</p>
+                </div>
+            </div>
+
+            {% if summary %}
+            <!-- Summary Bar -->
+            <div class="summary-bar">
+                <div class="summary-card">
+                    <div class="num">{{ summary.total_customers }}</div>
+                    <div class="label">Unique Customers</div>
+                </div>
+                <div class="summary-card">
+                    <div class="num">{{ summary.total_orders }}</div>
+                    <div class="label">Total Line Items</div>
+                </div>
+                <div class="summary-card">
+                    <div class="num">₹{{ "%.2f"|format(summary.total_revenue) }}</div>
+                    <div class="label">Total Revenue</div>
+                </div>
+            </div>
+
+            <div class="print-bar" id="printBar">
+                <h3><i class="fa-solid fa-receipt" style="color:var(--green-500)"></i> {{ receipts|length }} Receipts
+                    Generated</h3>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print
+                        All</button>
+                    <button class="btn-download-all" onclick="downloadAllReceipts()" id="downloadAllBtn"><i
+                            class="fa-solid fa-download"></i> Download All as ZIP</button>
+                    <button class="btn-download-all" style="background:linear-gradient(135deg,#dc2626,#ef4444);"
+                        onclick="clearAllReceipts()"><i class="fa-solid fa-trash-can"></i> Clear All</button>
+                    <span class="download-progress" id="downloadProgress"></span>
+                </div>
+            </div>
+
+            <!-- All Receipts -->
+            <div class="receipts-container">
+                <div class="receipts-grid">
+                    {% for r in receipts %}
+                    <div class="receipt-card">
+                        <div class="receipt-logo-area">
+                            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="BloomBowl">
+                            <h2>BLOOMBOWL</h2>
+                            <p class="receipt-tagline">Fresh Sprouts and Juicy Fruits Everyday</p>
+                            <p>FSSAI: 20725037004180</p>
+                        </div>
+                        <div class="receipt-meta">
+                            <div class="receipt-meta-item">
+                                <strong>Receipt No.</strong>
+                                <span>{{ r.receipt_num }}</span>
+                            </div>
+                            <div class="receipt-meta-item">
+                                <strong>Date</strong>
+                                <span>{{ r.date }}</span>
+                            </div>
+                            <div class="receipt-meta-item">
+                                <strong>Customer</strong>
+                                <span>{{ r.customer_name }}</span>
+                            </div>
+                            <div class="receipt-meta-item">
+                                <strong>Payment</strong>
+                                <span>{{ r.payment_method }}</span>
+                            </div>
+                            {% if r.customer_phone %}
+                            <div class="receipt-meta-item">
+                                <strong>Phone</strong>
+                                <span>{{ r.customer_phone }}</span>
+                            </div>
+                            {% endif %}
+                            <div class="receipt-meta-item">
+                                <strong>Time</strong>
+                                <span>{{ r.time }}</span>
+                            </div>
+                        </div>
+                        <table class="receipt-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Item</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in r.line_items %}
+                                <tr>
+                                    <td>{{ item.date if item.date else '-' }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.qty }}</td>
+                                    <td>₹{{ "%.2f"|format(item.price) }}</td>
+                                    <td>₹{{ "%.2f"|format(item.total) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="receipt-totals">
+                            <div class="receipt-total-row grand-total">
+                                <span>Total</span>
+                                <span>₹{{ "%.2f"|format(r.total) }}</span>
+                            </div>
+                        </div>
+                        <div class="receipt-footer">
+                            <p class="thank-you">Thank you! 🌱</p>
+                            <p class="contact-line"><i class="fa-brands fa-whatsapp"></i> +91 8849570610</p>
+                        </div>
+                        <button class="receipt-download-btn"
+                            onclick="downloadReceipt(this, '{{ r.customer_name|e }}', '{{ r.receipt_num }}')">
+                            <i class="fa-solid fa-download"></i> Download Receipt
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <script>
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            if (tab === 'upload') {
+                document.getElementById('tabUpload').classList.add('active');
+                document.getElementById('contentUpload').classList.add('active');
+            } else {
+                document.getElementById('tabPaste').classList.add('active');
+                document.getElementById('contentPaste').classList.add('active');
+            }
+        }
+
+        // Paste area live stats
+        const pasteArea = document.getElementById('pasteArea');
+        const pasteStats = document.getElementById('pasteStats');
+        if (pasteArea) {
+            pasteArea.addEventListener('input', updatePasteStats);
+            pasteArea.addEventListener('paste', function () {
+                setTimeout(updatePasteStats, 100);
+            });
+        }
+
+        function updatePasteStats() {
+            if (!pasteArea || !pasteStats) return;
+            const text = pasteArea.value.trim();
+            if (!text) { pasteStats.textContent = ''; return; }
+            const lines = text.split('\n').filter(l => l.trim());
+            const dataRows = lines.length > 1 ? lines.length - 1 : 0;
+            pasteStats.textContent = `📊 ${dataRows} data row${dataRows !== 1 ? 's' : ''} detected (${lines.length} total lines incl. header)`;
+        }
+
+        function clearPasteArea() {
+            if (pasteArea) pasteArea.value = '';
+            if (pasteStats) pasteStats.textContent = '';
+        }
+
+        // Show selected file name & clear old receipts
+        const fileInput = document.getElementById('excelFile');
+        const fileName = document.getElementById('fileName');
+        if (fileInput) {
+            fileInput.addEventListener('change', function () {
+                if (this.files.length > 0) {
+                    fileName.textContent = '📄 ' + this.files[0].name;
+                    fileName.style.display = 'block';
+
+                    // Clear previous receipts, summary, and print bar
+                    const oldSummary = document.querySelector('.summary-bar');
+                    const oldPrintBar = document.querySelector('.print-bar');
+                    const oldReceipts = document.querySelector('.receipts-container');
+                    if (oldSummary) oldSummary.remove();
+                    if (oldPrintBar) oldPrintBar.remove();
+                    if (oldReceipts) oldReceipts.remove();
+                }
+            });
+        }
+
+        // Download single receipt as PNG
+        async function downloadReceipt(btn, customerName, receiptNum) {
+            const card = btn.closest('.receipt-card');
+            const origText = btn.innerHTML;
+            btn.disabled = true;
+            btn.classList.add('downloading');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating...';
+
+            // Hide the download button during capture
+            btn.style.display = 'none';
+
+            try {
+                const canvas = await html2canvas(card, {
+                    scale: 2,
+                    backgroundColor: '#ffffff',
+                    useCORS: true,
+                    logging: false
+                });
+
+                const link = document.createElement('a');
+                const safeName = customerName.replace(/[^a-zA-Z0-9]/g, '_');
+                link.download = `BloomBowl_Receipt_${safeName}_${receiptNum}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (err) {
+                console.error('Download error:', err);
+                alert('Error generating receipt image. Please try again.');
+            }
+
+            btn.style.display = '';
+            btn.disabled = false;
+            btn.classList.remove('downloading');
+            btn.innerHTML = origText;
+        }
+
+        // Download ALL receipts as a single ZIP file
+        async function downloadAllReceipts() {
+            const cards = document.querySelectorAll('.receipt-card');
+            const btn = document.getElementById('downloadAllBtn');
+            const progress = document.getElementById('downloadProgress');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating images...';
+
+            const zip = new JSZip();
+            const imgFolder = zip.folder('BloomBowl_Receipts');
+            let successCount = 0;
+
+            for (let i = 0; i < cards.length; i++) {
+                progress.textContent = `Capturing ${i + 1} / ${cards.length}...`;
+                const card = cards[i];
+                const dlBtn = card.querySelector('.receipt-download-btn');
+                if (dlBtn) dlBtn.style.display = 'none';
+
+                try {
+                    const canvas = await html2canvas(card, {
+                        scale: 2,
+                        backgroundColor: '#ffffff',
+                        useCORS: true,
+                        logging: false
+                    });
+
+                    const nameEl = card.querySelector('.receipt-meta-item:nth-child(3) span');
+                    const numEl = card.querySelector('.receipt-meta-item:first-child span');
+                    const name = nameEl ? nameEl.textContent.replace(/[^a-zA-Z0-9]/g, '_') : `receipt_${i + 1}`;
+                    const num = numEl ? numEl.textContent.trim().replace(/[^a-zA-Z0-9\-]/g, '') : `${i + 1}`;
+
+                    // Convert canvas to blob and add to zip
+                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                    imgFolder.file(`${name}_${num}.png`, blob);
+                    successCount++;
+                } catch (err) {
+                    console.error('Error on receipt', i + 1, err);
+                }
+
+                if (dlBtn) dlBtn.style.display = '';
+            }
+
+            // Generate and download the ZIP
+            progress.textContent = '📦 Creating ZIP file...';
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating ZIP...';
+
+            try {
+                const zipBlob = await zip.generateAsync({ type: 'blob' }, (metadata) => {
+                    progress.textContent = `📦 Packing ZIP... ${Math.round(metadata.percent)}%`;
+                });
+
+                const today = new Date().toISOString().slice(0, 10);
+                saveAs(zipBlob, `BloomBowl_Receipts_${today}.zip`);
+
+                progress.textContent = `✅ ${successCount} receipts downloaded!`;
+            } catch (err) {
+                console.error('ZIP creation error:', err);
+                progress.textContent = '❌ Error creating ZIP';
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-download"></i> Download All as ZIP';
+            setTimeout(() => { progress.textContent = ''; }, 4000);
+        }
+
+        // Clear all receipts and reset for new upload
+        function clearAllReceipts() {
+            const summary = document.querySelector('.summary-bar');
+            const printBar = document.getElementById('printBar');
+            const receipts = document.querySelector('.receipts-container');
+            if (summary) summary.remove();
+            if (printBar) printBar.remove();
+            if (receipts) receipts.remove();
+
+            // Reset the file input
+            const fileInput = document.getElementById('excelFile');
+            const fileName = document.getElementById('fileName');
+            if (fileInput) fileInput.value = '';
+            if (fileName) { fileName.textContent = ''; fileName.style.display = 'none'; }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Flash auto-dismiss
+        document.querySelectorAll('.flash-message').forEach(msg => {
+            setTimeout(() => {
+                msg.style.animation = 'slideOut 0.4s ease forwards';
+                setTimeout(() => msg.remove(), 400);
+            }, 5000);
+        });
+    </script>
+</body>
+
+</html>

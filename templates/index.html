@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BloomBowl - Fresh Sprouts and Juicy Fruits Everyday. Healthy, delicious bowls made with love.">
+    <title>BloomBowl — Fresh Sprouts & Juicy Fruits Everyday</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="nav-logo">
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="BloomBowl Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-name">BLOOMBOWL</span>
+                    <span class="logo-tagline">Fresh Sprouts & Juicy Fruits</span>
+                </div>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#menu" class="nav-link">Menu</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#testimonials" class="nav-link">Reviews</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="{{ url_for('receipt') }}" class="nav-link"><i class="fa-solid fa-receipt"></i> Receipt</a>
+                <a href="{{ url_for('bulk_receipt') }}" class="nav-link"><i class="fa-solid fa-file-excel"></i> Bulk</a>
+                <a href="#order" class="nav-link btn-order-nav">Order Now</a>
+            </div>
+            <button class="nav-toggle" id="navToggle"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}" onclick="this.remove()">
+            <span>{{ message }}</span>
+            <button class="flash-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <img src="{{ url_for('static', filename='images/hero.png') }}" alt="BloomBowl Healthy Bowls">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="BloomBowl Logo" class="hero-logo">
+            <div class="hero-badge"><i class="fa-solid fa-leaf"></i> 100% Fresh & Natural</div>
+            <h1 class="hero-title">
+                Start Your Day<br>
+                with a <span class="text-accent">Bloom Bowl</span>
+            </h1>
+            <p class="hero-subtitle">Fresh sprouts, juicy fruits, and wholesome goodness — crafted to fuel your health,
+                served with love every single day.</p>
+            <div class="hero-actions">
+                <a href="#menu" class="btn btn-primary btn-lg"><i class="fa-solid fa-utensils"></i> Explore Menu</a>
+                <a href="https://wa.me/918849570610" target="_blank" class="btn btn-whatsapp btn-lg"><i
+                        class="fa-brands fa-whatsapp"></i> Order on WhatsApp</a>
+            </div>
+            <div class="hero-features">
+                <div class="hero-feature"><i class="fa-solid fa-leaf"></i><span>100% Fresh</span></div>
+                <div class="hero-feature"><i class="fa-solid fa-heart"></i><span>Healthy</span></div>
+                <div class="hero-feature"><i class="fa-solid fa-bolt"></i><span>High Protein</span></div>
+                <div class="hero-feature"><i class="fa-solid fa-truck-fast"></i><span>Fast Delivery</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="container stats-grid">
+            <div class="stat-item"><span class="stat-num" data-count="1000">1000+</span><span class="stat-label">Happy
+                    Customers</span></div>
+            <div class="stat-item"><span class="stat-num" data-count="15">15+</span><span class="stat-label">Menu
+                    Items</span></div>
+            <div class="stat-item"><span class="stat-num" data-count="4">4</span><span
+                    class="stat-label">Categories</span></div>
+            <div class="stat-item"><span class="stat-num">4.9 ⭐</span><span class="stat-label">Customer Rating</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="section menu-section" id="menu">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fa-solid fa-utensils"></i> OUR MENU</span>
+                <h2 class="section-title">Freshness in Every <span class="text-accent">Bowl</span></h2>
+                <p class="section-subtitle">Handcrafted bowls with the freshest ingredients — from sprouts to fruits,
+                    we've got your healthy cravings covered</p>
+            </div>
+
+            <!-- Category Tabs -->
+            <div class="menu-tabs" id="menuTabs">
+                <button class="menu-tab active" data-category="all">🍽️ All Items</button>
+                {% for key, cat in menu.items() %}
+                <button class="menu-tab" data-category="{{ key }}">{{ cat.icon }} {{ cat.title }}</button>
+                {% endfor %}
+            </div>
+
+            <!-- Menu Categories -->
+            {% for key, category in menu.items() %}
+            <div class="menu-category" id="cat-{{ key }}" data-cat="{{ key }}">
+                <div class="category-header">
+                    <div class="category-img">
+                        <img src="{{ url_for('static', filename='images/' + category.image) }}"
+                            alt="{{ category.title }}">
+                    </div>
+                    <div class="category-info">
+                        <span class="category-icon">{{ category.icon }}</span>
+                        <h3 class="category-title">{{ category.title }}</h3>
+                        <p class="category-desc">{{ category.description }}</p>
+                    </div>
+                </div>
+                <div class="menu-items-grid">
+                    {% for item in category.products %}
+                    <div class="menu-item {% if item.popular %}popular{% endif %}">
+                        {% if item.popular %}<span class="popular-badge"><i class="fa-solid fa-fire"></i>
+                            Popular</span>{% endif %}
+                        <div class="menu-item-info">
+                            <h4 class="menu-item-name">{{ item.name }}</h4>
+                            <p class="menu-item-desc">{{ item.desc }}</p>
+                        </div>
+                        <div class="menu-item-price">₹{{ item.price }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about-section" id="about">
+        <div class="container about-grid">
+            <div class="about-images">
+                <div class="about-img-grid">
+                    <img src="{{ url_for('static', filename='images/sprout_bowl.png') }}" alt="Sprout Bowl"
+                        class="about-img img-1">
+                    <img src="{{ url_for('static', filename='images/fruit_bowl.png') }}" alt="Fruit Bowl"
+                        class="about-img img-2">
+                    <img src="{{ url_for('static', filename='images/sweetcorn_bowl.png') }}" alt="Sweetcorn Bowl"
+                        class="about-img img-3">
+                    <img src="{{ url_for('static', filename='images/paneer_bowl.png') }}" alt="Paneer Bowl"
+                        class="about-img img-4">
+                </div>
+            </div>
+            <div class="about-content">
+                <span class="section-tag"><i class="fa-solid fa-heart"></i> OUR STORY</span>
+                <h2 class="section-title">Why <span class="text-accent">BloomBowl</span>?</h2>
+                <p class="about-text">At BloomBowl, we believe that healthy food should be delicious, affordable, and
+                    accessible to everyone. Every bowl we prepare is made with the freshest sprouts, seasonal fruits,
+                    and carefully selected ingredients.</p>
+                <p class="about-text">Our mission is simple — to help you bloom from within, one bowl at a time. No
+                    preservatives, no artificial flavors — just pure, natural goodness delivered to your doorstep.</p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <div class="feature-icon"><i class="fa-solid fa-seedling"></i></div>
+                        <div>
+                            <h4>Farm Fresh</h4>
+                            <p>Fresh sprouts prepared daily</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feature-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                        <div>
+                            <h4>FSSAI Certified</h4>
+                            <p>License: 20725037004180</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feature-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                        <div>
+                            <h4>Made with Love</h4>
+                            <p>Hygienically prepared bowls</p>
+                        </div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="feature-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                        <div>
+                            <h4>Affordable</h4>
+                            <p>Starting from just ₹40</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section testimonials-section" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fa-solid fa-star"></i> REVIEWS</span>
+                <h2 class="section-title">What Our Customers <span class="text-accent">Say</span></h2>
+                <p class="section-subtitle">Don't just take our word — hear from our happy bowl-lovers</p>
+            </div>
+            <div class="testimonials-grid">
+                {% for t in testimonials %}
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">{% for i in range(t.rating) %}⭐{% endfor %}</div>
+                    <p class="testimonial-text">"{{ t.text }}"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">{{ t.name[0] }}</div>
+                        <span class="author-name">{{ t.name }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Order / CTA Section -->
+    <section class="section order-section" id="order">
+        <div class="container order-grid">
+            <div class="order-info">
+                <span class="section-tag tag-white"><i class="fa-solid fa-phone"></i> ORDER NOW</span>
+                <h2 class="order-title">Ready to Start Your<br><span class="text-accent">Healthy Journey</span>?</h2>
+                <p class="order-subtitle">Order directly via WhatsApp or give us a call. We deliver fresh bowls right to
+                    your doorstep!</p>
+                <div class="order-buttons">
+                    <a href="https://wa.me/918849570610" target="_blank" class="btn btn-whatsapp btn-lg"><i
+                            class="fa-brands fa-whatsapp"></i> WhatsApp: +91 8849570610</a>
+                    <a href="tel:+918849570610" class="btn btn-outline-white btn-lg"><i class="fa-solid fa-phone"></i>
+                        Call Now</a>
+                </div>
+            </div>
+            <div class="order-form-container">
+                <form method="POST" action="{{ url_for('order') }}" class="order-form">
+                    <h3><i class="fa-solid fa-paper-plane"></i> Quick Order</h3>
+                    <div class="form-group">
+                        <label for="name">Your Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter your name"
+                            class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="+91 XXXXX XXXXX"
+                            class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="items">What would you like to order?</label>
+                        <textarea id="items" name="items" placeholder="e.g., 2x Bloom Bowl Special, 1x Fruit Bowl Big"
+                            class="form-input form-textarea" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-full"><i
+                            class="fa-solid fa-check-circle"></i> Place Order</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact-section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag"><i class="fa-solid fa-location-dot"></i> CONTACT</span>
+                <h2 class="section-title">Get in <span class="text-accent">Touch</span></h2>
+            </div>
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                    <h4>WhatsApp</h4>
+                    <a href="https://wa.me/918849570610">+91 8849570610</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                    <h4>Call Us</h4>
+                    <a href="tel:+918849570610">+91 8849570610</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+                    <h4>Hours</h4>
+                    <p>7:00 AM – 10:00 PM<br>Open Daily</p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon"><i class="fa-solid fa-certificate"></i></div>
+                    <h4>FSSAI</h4>
+                    <p>20725037004180</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo-row">
+                        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="BloomBowl"
+                            class="footer-logo-img">
+                        <span class="footer-logo">BLOOMBOWL</span>
+                    </div>
+                    <p>Fresh Sprouts and Juicy Fruits Everyday</p>
+                    <div class="footer-social">
+                        <a href="https://wa.me/918849570610" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="#menu">Menu</a>
+                    <a href="#about">About Us</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Popular Items</h4>
+                    <a href="#menu">Bloom Bowl Special ₹70</a>
+                    <a href="#menu">Sprouts Bowl ₹55</a>
+                    <a href="#menu">Fruit Bowl ₹80</a>
+                    <a href="#menu">Paneer Bowl ₹100</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 BloomBowl. All rights reserved. Made with <i class="fa-solid fa-heart"
+                        style="color:#e74c3c"></i> | FSSAI: 20725037004180</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

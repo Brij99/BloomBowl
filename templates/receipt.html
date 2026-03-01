@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BloomBowl — Payment Receipt</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* ─── Receipt Page Styles ─────────────────────────────────── */
+        .receipt-page {
+            padding: 6rem 0 3rem;
+            min-height: 100vh;
+            background: var(--bg-warm);
+        }
+
+        .receipt-page .container {
+            max-width: 1100px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-header h1 {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            color: var(--green-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--green-600);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-link:hover {
+            color: var(--green-800);
+        }
+
+        .receipt-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* ─── Form Side ─────────────────────────────────────────── */
+        .receipt-form-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .receipt-form-card h2 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--green-800);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .receipt-form-card h2 i {
+            color: var(--green-500);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.35rem;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            background: var(--green-50);
+            border: 1.5px solid var(--card-border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 0.88rem;
+            font-family: var(--font);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: var(--green-400);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+        }
+
+        .items-section h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--green-800);
+            margin: 1.5rem 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .item-row {
+            display: grid;
+            grid-template-columns: 2fr 0.7fr 1fr 40px;
+            gap: 0.5rem;
+            align-items: end;
+            margin-bottom: 0.75rem;
+            animation: fadeSlideUp 0.3s ease;
+        }
+
+        .item-row .form-group {
+            margin-bottom: 0;
+        }
+
+        .remove-item {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1.5px solid #fecaca;
+            background: #fff5f5;
+            color: #ef4444;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            margin-bottom: 2px;
+        }
+
+        .remove-item:hover {
+            background: #fee2e2;
+            border-color: #f87171;
+        }
+
+        .add-item-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            background: var(--green-50);
+            color: var(--green-700);
+            border: 1.5px dashed var(--green-300);
+            border-radius: var(--radius-sm);
+            font-family: var(--font);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-item-btn:hover {
+            background: var(--green-100);
+            border-color: var(--green-400);
+        }
+
+        .form-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* ─── Receipt Preview ──────────────────────────────────── */
+        .receipt-preview-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 0;
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            position: sticky;
+            top: 5rem;
+        }
+
+        .receipt-preview-header {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .receipt-preview-header h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .print-btn {
+            padding: 0.4rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50px;
+            font-family: var(--font);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .print-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .receipt-body {
+            padding: 2rem;
+        }
+
+        .receipt-empty {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .receipt-empty i {
+            font-size: 3rem;
+            color: var(--green-200);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .receipt-empty p {
+            font-size: 0.9rem;
+        }
+
+        /* ─── Printable Receipt ────────────────────────────────── */
+        .receipt-print {
+            font-family: var(--font);
+        }
+
+        .receipt-logo-area {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px dashed var(--green-200);
+        }
+
+        .receipt-logo-area img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin: 0 auto 0.75rem;
+            display: block;
+        }
+
+        .receipt-logo-area h2 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--green-800);
+            margin-bottom: 0.15rem;
+        }
+
+        .receipt-logo-area p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .receipt-logo-area .receipt-tagline {
+            color: var(--green-600);
+            font-weight: 600;
+        }
+
+        .receipt-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .receipt-meta-item {
+            font-size: 0.8rem;
+        }
+
+        .receipt-meta-item strong {
+            color: var(--green-800);
+            display: block;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.1rem;
+        }
+
+        .receipt-meta-item span {
+            color: var(--text-secondary);
+        }
+
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        .receipt-table thead th {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            border-bottom: 2px solid var(--green-200);
+            padding: 0.5rem 0.35rem;
+            text-align: left;
+        }
+
+        .receipt-table thead th:last-child,
+        .receipt-table thead th:nth-child(2),
+        .receipt-table thead th:nth-child(3) {
+            text-align: right;
+        }
+
+        .receipt-table tbody td {
+            font-size: 0.85rem;
+            padding: 0.6rem 0.35rem;
+            border-bottom: 1px solid #f0f0e8;
+            color: var(--text);
+        }
+
+        .receipt-table tbody td:last-child,
+        .receipt-table tbody td:nth-child(2),
+        .receipt-table tbody td:nth-child(3) {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .receipt-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .receipt-totals {
+            border-top: 2px dashed var(--green-200);
+            padding-top: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .receipt-total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        .receipt-total-row.grand-total {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--green-800);
+            padding-top: 0.5rem;
+            margin-top: 0.3rem;
+            border-top: 2px solid var(--green-300);
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px dashed var(--green-200);
+        }
+
+        .receipt-footer p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.2rem;
+        }
+
+        .receipt-footer .thank-you {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--green-700);
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .receipt-footer .contact-line {
+            color: var(--green-600);
+            font-weight: 600;
+        }
+
+        /* ─── Print Styles ─────────────────────────────────────── */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .receipt-body,
+            .receipt-body * {
+                visibility: visible;
+            }
+
+            .receipt-body {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 1.5rem;
+            }
+
+            .navbar,
+            .flash-container,
+            .receipt-form-card,
+            .receipt-preview-header,
+            .footer,
+            .back-link,
+            .page-header {
+                display: none !important;
+            }
+
+            .receipt-preview-card {
+                box-shadow: none;
+                border: none;
+            }
+        }
+
+        /* ─── Responsive ─────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .receipt-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .receipt-preview-card {
+                position: static;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .item-row {
+                grid-template-columns: 1fr;
+            }
+
+            .receipt-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar scrolled" id="navbar">
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="nav-logo">
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="BloomBowl Logo" class="logo-img">
+                <div class="logo-text">
+                    <span class="logo-name">BLOOMBOWL</span>
+                    <span class="logo-tagline">Fresh Sprouts & Juicy Fruits</span>
+                </div>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('index') }}#menu" class="nav-link">Menu</a>
+                <a href="{{ url_for('receipt') }}" class="nav-link active">Receipt</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}" onclick="this.remove()">
+            <span>{{ message }}</span>
+            <button class="flash-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <section class="receipt-page">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to
+                Website</a>
+            <div class="page-header">
+                <h1><i class="fa-solid fa-receipt" style="color:var(--green-500)"></i> Payment Receipt Generator</h1>
+                <p>Enter customer details and items to generate a professional receipt</p>
+            </div>
+
+            <div class="receipt-layout">
+                <!-- Form Side -->
+                <div class="receipt-form-card">
+                    <h2><i class="fa-solid fa-pen-to-square"></i> Receipt Details</h2>
+                    <form method="POST" action="{{ url_for('receipt') }}" id="receiptForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customer_name">Customer Name *</label>
+                                <input type="text" id="customer_name" name="customer_name" required
+                                    placeholder="Enter name" class="form-input"
+                                    value="{{ receipt.customer_name if receipt else '' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_phone">Phone Number</label>
+                                <input type="tel" id="customer_phone" name="customer_phone"
+                                    placeholder="+91 XXXXX XXXXX" class="form-input"
+                                    value="{{ receipt.customer_phone if receipt else '' }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="payment_method">Payment Method</label>
+                            <select id="payment_method" name="payment_method" class="form-input form-select">
+                                <option value="Cash" {{ 'selected' if receipt and receipt.payment_method=='Cash' }}>💵
+                                    Cash</option>
+                                <option value="UPI" {{ 'selected' if receipt and receipt.payment_method=='UPI' }}>📱 UPI
+                                    / Google Pay / PhonePe</option>
+                                <option value="Card" {{ 'selected' if receipt and receipt.payment_method=='Card' }}>💳
+                                    Card</option>
+                                <option value="Online" {{ 'selected' if receipt and receipt.payment_method=='Online' }}>
+                                    🌐 Online Transfer</option>
+                            </select>
+                        </div>
+
+                        <div class="items-section">
+                            <h3>
+                                <span><i class="fa-solid fa-bowl-food"></i> Order Items</span>
+                                <button type="button" class="add-item-btn" onclick="addItemRow()"><i
+                                        class="fa-solid fa-plus"></i> Add Item</button>
+                            </h3>
+                            <div id="itemRows">
+                                {% if receipt %}
+                                {% for item in receipt.line_items %}
+                                <div class="item-row">
+                                    <div class="form-group">
+                                        <label>Item</label>
+                                        <select name="item_name[]" class="form-input form-select item-select"
+                                            onchange="updatePrice(this)">
+                                            <option value="">Select item...</option>
+                                            {% for mi in menu_items %}
+                                            <option value="{{ mi.name }}" data-price="{{ mi.price }}" {{ 'selected' if
+                                                mi.name==item.name }}>{{ mi.name }} — ₹{{ mi.price }}</option>
+                                            {% endfor %}
+                                            <option value="Custom">✏️ Custom Item</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Qty</label>
+                                        <input type="number" name="item_qty[]" min="1" value="{{ item.qty }}"
+                                            class="form-input" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price (₹)</label>
+                                        <input type="number" name="item_price[]" min="0" step="0.01"
+                                            value="{{ item.price }}" class="form-input item-price" required>
+                                    </div>
+                                    <button type="button" class="remove-item" onclick="this.parentElement.remove()"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </div>
+                                {% endfor %}
+                                {% else %}
+                                <div class="item-row">
+                                    <div class="form-group">
+                                        <label>Item</label>
+                                        <select name="item_name[]" class="form-input form-select item-select"
+                                            onchange="updatePrice(this)">
+                                            <option value="">Select item...</option>
+                                            {% for mi in menu_items %}
+                                            <option value="{{ mi.name }}" data-price="{{ mi.price }}">{{ mi.name }} —
+                                                ₹{{ mi.price }}</option>
+                                            {% endfor %}
+                                            <option value="Custom">✏️ Custom Item</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Qty</label>
+                                        <input type="number" name="item_qty[]" min="1" value="1" class="form-input"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price (₹)</label>
+                                        <input type="number" name="item_price[]" min="0" step="0.01" value=""
+                                            placeholder="0" class="form-input item-price" required>
+                                    </div>
+                                    <button type="button" class="remove-item" onclick="this.parentElement.remove()"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-lg btn-full"><i
+                                    class="fa-solid fa-receipt"></i> Generate Receipt</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Receipt Preview Side -->
+                <div class="receipt-preview-card">
+                    <div class="receipt-preview-header">
+                        <h2><i class="fa-solid fa-eye"></i> Receipt Preview</h2>
+                        {% if receipt %}
+                        <button class="print-btn" onclick="window.print()"><i class="fa-solid fa-print"></i>
+                            Print</button>
+                        {% endif %}
+                    </div>
+                    <div class="receipt-body">
+                        {% if receipt %}
+                        <div class="receipt-print" id="receiptPrint">
+                            <!-- Logo & Header -->
+                            <div class="receipt-logo-area">
+                                <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="BloomBowl">
+                                <h2>BLOOMBOWL</h2>
+                                <p class="receipt-tagline">Fresh Sprouts and Juicy Fruits Everyday</p>
+                                <p>FSSAI: 20725037004180</p>
+                            </div>
+
+                            <!-- Receipt Meta -->
+                            <div class="receipt-meta">
+                                <div class="receipt-meta-item">
+                                    <strong>Receipt No.</strong>
+                                    <span>{{ receipt.receipt_num }}</span>
+                                </div>
+                                <div class="receipt-meta-item">
+                                    <strong>Date</strong>
+                                    <span>{{ receipt.date }}</span>
+                                </div>
+                                <div class="receipt-meta-item">
+                                    <strong>Customer</strong>
+                                    <span>{{ receipt.customer_name }}</span>
+                                </div>
+                                <div class="receipt-meta-item">
+                                    <strong>Payment</strong>
+                                    <span>{{ receipt.payment_method }}</span>
+                                </div>
+                                {% if receipt.customer_phone %}
+                                <div class="receipt-meta-item">
+                                    <strong>Phone</strong>
+                                    <span>{{ receipt.customer_phone }}</span>
+                                </div>
+                                {% endif %}
+                                <div class="receipt-meta-item">
+                                    <strong>Time</strong>
+                                    <span>{{ receipt.time }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Items Table -->
+                            <table class="receipt-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in receipt.line_items %}
+                                    <tr>
+                                        <td>{{ item.name }}</td>
+                                        <td>{{ item.qty }}</td>
+                                        <td>₹{{ "%.2f"|format(item.price) }}</td>
+                                        <td>₹{{ "%.2f"|format(item.total) }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <!-- Totals -->
+                            <div class="receipt-totals">
+                                <div class="receipt-total-row">
+                                    <span>Subtotal</span>
+                                    <span>₹{{ "%.2f"|format(receipt.subtotal) }}</span>
+                                </div>
+                                <div class="receipt-total-row grand-total">
+                                    <span>Total</span>
+                                    <span>₹{{ "%.2f"|format(receipt.total) }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="receipt-footer">
+                                <p class="thank-you">Thank you for choosing BloomBowl! 🌱</p>
+                                <p class="contact-line"><i class="fa-brands fa-whatsapp"></i> +91 8849570610</p>
+                                <p>This is a computer-generated receipt.</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="receipt-empty">
+                            <i class="fa-solid fa-receipt"></i>
+                            <p>Fill in the details and click<br><strong>"Generate Receipt"</strong> to preview</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Menu items data for JS
+        const menuItems = {{ menu_items| tojson }};
+
+        function addItemRow() {
+            const container = document.getElementById('itemRows');
+            let options = '<option value="">Select item...</option>';
+            menuItems.forEach(item => {
+                options += `<option value="${item.name}" data-price="${item.price}">${item.name} — ₹${item.price}</option>`;
+            });
+            options += '<option value="Custom">✏️ Custom Item</option>';
+
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            row.innerHTML = `
+                <div class="form-group">
+                    <label>Item</label>
+                    <select name="item_name[]" class="form-input form-select item-select" onchange="updatePrice(this)">
+                        ${options}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Qty</label>
+                    <input type="number" name="item_qty[]" min="1" value="1" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Price (₹)</label>
+                    <input type="number" name="item_price[]" min="0" step="0.01" value="" placeholder="0" class="form-input item-price" required>
+                </div>
+                <button type="button" class="remove-item" onclick="this.parentElement.remove()"><i class="fa-solid fa-trash"></i></button>
+            `;
+            container.appendChild(row);
+        }
+
+        function updatePrice(selectEl) {
+            const row = selectEl.closest('.item-row');
+            const priceInput = row.querySelector('.item-price');
+            const selected = selectEl.options[selectEl.selectedIndex];
+            const price = selected.dataset.price;
+            if (price) {
+                priceInput.value = price;
+            } else {
+                priceInput.value = '';
+                priceInput.focus();
+            }
+        }
+
+        // Flash auto-dismiss
+        document.querySelectorAll('.flash-message').forEach(msg => {
+            setTimeout(() => {
+                msg.style.animation = 'slideOut 0.4s ease forwards';
+                setTimeout(() => msg.remove(), 400);
+            }, 5000);
+        });
+    </script>
+</body>
+
+</html>
