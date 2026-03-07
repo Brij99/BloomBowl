@@ -464,6 +464,88 @@
             border-top: 2px solid var(--green-300);
         }
 
+        /* UPI Payment Section */
+        .receipt-upi {
+            text-align: center;
+            margin-top: 0.75rem;
+        }
+
+        .upi-divider {
+            border-top: 1px dashed var(--green-300);
+            margin-bottom: 0.6rem;
+        }
+
+        .upi-title {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--green-700);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .upi-qr-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .upi-qr-img {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            border: 2px solid var(--green-200);
+            border-radius: 8px;
+            padding: 4px;
+            background: white;
+        }
+
+        .upi-id-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .upi-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .upi-id-link {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--green-700);
+            text-decoration: none;
+            cursor: pointer;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            background: var(--green-50);
+            border: 1px solid var(--green-200);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .upi-id-link:hover {
+            background: var(--green-100);
+            border-color: var(--green-400);
+        }
+
+        .upi-id-link.copied {
+            background: var(--green-500);
+            color: white;
+            border-color: var(--green-600);
+        }
+
+        .upi-hint {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
         .receipt-footer {
             text-align: center;
             margin-top: 1rem;
@@ -879,6 +961,25 @@
                                 <span>₹{{ "%.2f"|format(r.total) }}</span>
                             </div>
                         </div>
+
+                        <!-- UPI Payment Section -->
+                        <div class="receipt-upi">
+                            <div class="upi-divider"></div>
+                            <p class="upi-title">Pay via UPI</p>
+                            <div class="upi-qr-wrapper">
+                                <img src="{{ url_for('static', filename='images/upi_qr.png') }}" alt="UPI QR Code"
+                                    class="upi-qr-img">
+                            </div>
+                            <div class="upi-id-row">
+                                <span class="upi-label">UPI ID:</span>
+                                <a href="javascript:void(0)" class="upi-id-link" onclick="copyUpiId(this)"
+                                    title="Click to copy UPI ID">
+                                    bloombowl2026@idfcbank
+                                </a>
+                            </div>
+                            <p class="upi-hint">Scan QR or click UPI ID to copy</p>
+                        </div>
+
                         <div class="receipt-footer">
                             <p class="thank-you">Thank you! 🌱</p>
                             <p class="contact-line"><i class="fa-brands fa-whatsapp"></i> +91 8849570610</p>
@@ -1070,6 +1171,35 @@
 
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Copy UPI ID to clipboard
+        function copyUpiId(el) {
+            const upiId = 'bloombowl2026@idfcbank';
+            navigator.clipboard.writeText(upiId).then(() => {
+                const origText = el.textContent;
+                el.textContent = '✅ Copied!';
+                el.classList.add('copied');
+                setTimeout(() => {
+                    el.textContent = origText;
+                    el.classList.remove('copied');
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = upiId;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                const origText = el.textContent;
+                el.textContent = '✅ Copied!';
+                el.classList.add('copied');
+                setTimeout(() => {
+                    el.textContent = origText;
+                    el.classList.remove('copied');
+                }, 2000);
+            });
         }
 
         // Flash auto-dismiss
